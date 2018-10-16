@@ -27,7 +27,6 @@ def worker_thread(worker_HOST):
             batch = train_set.get()
             with model_lock:
                 params = model.read()
-                step = model.epoch()
             prot.send_one_message(s, batch[0].tobytes())
             prot.send_one_message(s, batch[1].tobytes())
             prot.send_one_message(s, params.tobytes())
@@ -82,12 +81,13 @@ with graph.as_default():
             epoch = model.epoch()
             sys.stdout.write("Epoch " + str(epoch) + ": accuracy = ")
             sys.stdout.flush()
-            acc = model.eval(*test_set.get())[0]
+            with model_lock:
+                acc = model.eval(*test_set.get())[0]
             print(str(acc))
             if acc >= max_train_accur or epoch >= max_train_epoch:
                 converged = True
                 break
-            time.sleep(1.8)
+            time.sleep(1.5)
 
         t_end = time.time()
         print('time: ', t_end - t_start)

@@ -26,8 +26,8 @@ learning_rate    = 0.05
 activation_func  = tf.nn.relu
 max_train_epoch  = 10000
 max_train_accur  = 0.97
-builder_opt  = tf.train.AdagradOptimizer(learning_rate)
-builder_dims = [784, 100, 10]
+builder_opt      = tf.train.AdagradOptimizer(learning_rate)
+builder_dims     = [784, 100, 10]
 
 # ------------------------------------------------------------------------- #
 
