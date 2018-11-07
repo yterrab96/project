@@ -12,15 +12,15 @@ import protocol as prot
 
 # Parameters
 HOST            = ''
-PORT            = 9000
-learning_rate   = 0.05
+PORT            = 8885
+learning_rate   = 0.001
 activation_func = tf.nn.relu
 
 # ------------------------------------------------------------------------- #
 
 # model instantiator
 builder_opt = tf.train.AdagradOptimizer(learning_rate)
-builder_dims = [784, 100, 10]
+builder_dims = [784, 800, 10]
 
 def builder(inputs=None):
     return models.dense_classifier(builder_dims, inputs=inputs, act_fn=activation_func, optimizer=builder_opt, epoch=True)
@@ -49,12 +49,11 @@ with graph.as_default():
                     break
                 x = np.frombuffer(data_x, np.float32)
                 x = x.reshape((50,784))
-                print('received obs')
 
                 # receive labels
                 data_y = prot.recv_one_message(conn)
                 y = np.frombuffer(data_y, np.int32)
-                print('received labels')
+                print('received batch')
 
                 # receive parameters
                 data_params = prot.recv_one_message(conn)
